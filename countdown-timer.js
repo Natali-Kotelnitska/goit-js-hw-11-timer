@@ -2,33 +2,43 @@ class CountdownTimer {
   constructor({ selector, targetDate }) {
     this.selector = selector;
     this.targetDate = targetDate;
-    this.intervalID = null;
+    // this.intervalID = null;
 
     this.days = document.querySelector('[data-value="days"]');
     this.hours = document.querySelector('[data-value="hours"]');
     this.mins = document.querySelector('[data-value="mins"]');
     this.secs = document.querySelector('[data-value="secs"]');
-
+    this.intervalID = null;
     this.start();
-    this.stop();
   }
 
   start() {
-    this.intervalID = setInterval(() => {
-      const currentTime = Date.now();
-      const timeDistance = this.targetDate - currentTime;
-      const time = this.getTimeComponents(timeDistance);
-      this.updateClockface(time);
-    }, 1000);
+    this.intervalID = setInterval(
+      () => {
+        const currentTime = Date.now();
+        const timeDistance = this.targetDate - currentTime;
+
+        if (this.timeDistance < 0) {
+          clearInterval(this.intervalID);
+          this.timeID = 0;
+          const time = this.getTimeComponents(0);
+          return;
+        }
+
+        const time = this.getTimeComponents(timeDistance);
+        this.updateClockface(time);
+      },
+      1000,
+      this,
+    );
   }
 
-  stop() {
-    if (this.timeDistance < 0) {
-      clearInterval(this.intervalID);
-      const time = this.getTimeComponents(0);
-      console.log(time);
-    }
-  }
+  // stop() {
+  //   if (this.timeDistance < 0) {
+  //     clearInterval(this.intervalID);
+  //     const time = this.getTimeComponents(0);
+  //   }
+  // }
   // onClear = () => {
   //   this.stop();
   //   this.timeDistance = 0;
@@ -58,5 +68,5 @@ class CountdownTimer {
 
 const timer = new CountdownTimer({
   selector: '#timer-1',
-  targetDate: new Date('Dec 19, 2021'),
+  targetDate: new Date('Nov 06, 2021'),
 });
